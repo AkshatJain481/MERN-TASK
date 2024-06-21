@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       const fetchUserData = async () => {
         try {
-          const response = await axios.get('http://localhost:5000/user', {
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/user`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           const { _id, email, username } = response.data;
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (formData) => {
     try {
-      const response = await axios.post('http://localhost:5000/login', formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, formData);
       const { _id, email, username, token } = response.data;
       // Set token in cookie
       document.cookie = `token=${token}; max-age=3600; path=/`; // Expires in 1 hour

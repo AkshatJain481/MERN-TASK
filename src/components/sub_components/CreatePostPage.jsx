@@ -21,7 +21,7 @@ function CreatePostPage({ handlePostModal, postData }) {
             if (postData) {
                 // Update existing post
                 response = await axios.put(
-                    `http://localhost:5000/posts/${postData._id}`,
+                    `${process.env.REACT_APP_API_URL}/posts/${postData._id}`,
                     { title, description, mediaUrl , userId: user._id},
                     { headers: { Authorization: `Bearer ${token}` } }
                     
@@ -36,7 +36,7 @@ function CreatePostPage({ handlePostModal, postData }) {
             } else {
                 // Create new post
                 response = await axios.post(
-                    'http://localhost:5000/posts',
+                    `${process.env.REACT_APP_API_URL}/posts`,
                     { userId: user._id, title, description, mediaUrl },
                     { headers: { Authorization: `Bearer ${token}` } }
 

@@ -29,14 +29,14 @@ function SignUp({onClose}) {
     e.preventDefault();
     try {
       if (formData.password === ConfirmPassword) {
-      await axios.post('http://localhost:5000/register', formData);
+      await axios.post(`${process.env.REACT_APP_API_URL}/register`, formData);
       toast.success('Registration successful');
       setIsModalOpen(true);
       } else {
         toast.error('Passwords do not match');
       }
     } catch (error) {
-      toast.error("email or username already in use!");
+      toast.error("Some error occured make sure to fill all fields and email , username should be unique");
     }
   };
   

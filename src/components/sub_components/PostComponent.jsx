@@ -21,7 +21,7 @@ const PostComponent = ({key, postid, title, description, mediaUrl, likes, commen
     if (userId && userId._id) {
       const USERID = userId._id;
       try {
-        const response = await axios.get(`http://localhost:5000/users?id=${USERID}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/users?id=${USERID}`);
         setUser(response.data);
         console.log(response);
         console.log(USERID);
@@ -40,7 +40,7 @@ const PostComponent = ({key, postid, title, description, mediaUrl, likes, commen
     try {
       if (user) {
        const CurrentuserId = user._id;
-      const response = await axios.post(`http://localhost:5000/posts/${postid}/like`, { CurrentuserId });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/posts/${postid}/like`, { CurrentuserId });
       setCurrentLikes(response.data.length);
      }
      else{
@@ -62,7 +62,7 @@ const PostComponent = ({key, postid, title, description, mediaUrl, likes, commen
       if (user) { 
       const UserId = user._id;
       console.log(UserId);
-      await axios.delete(`http://localhost:5000/posts/${postid}`,{params: { UserId }});
+      await axios.delete(`${process.env.REACT_APP_API_URL}/posts/${postid}`,{params: { UserId }});
       toast.success('Post deleted successfully');
       setTimeout( ()=>{window.location.reload()}  , 2000)
       } else {
@@ -78,7 +78,7 @@ const PostComponent = ({key, postid, title, description, mediaUrl, likes, commen
   try {
     if (user) { 
       const CommentuserId = user._id;
-      const response = await axios.post(`http://localhost:5000/posts/${postid}/comment`, { CommentuserId, text: newComment });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/posts/${postid}/comment`, { CommentuserId, text: newComment });
       const newCommentData = response.data; // Assuming response.data contains the new comment
       console.log(newCommentData);
       setCurrentComments([...currentComments, newCommentData]); // Append new comment to existing comments

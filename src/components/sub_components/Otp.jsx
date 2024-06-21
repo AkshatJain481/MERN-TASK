@@ -13,7 +13,7 @@ function Otp({ modeltoggler, email }) {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/reset-password', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/reset-password`, {
         email,
         otp,
         newPassword,
