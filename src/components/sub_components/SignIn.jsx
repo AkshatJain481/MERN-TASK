@@ -1,13 +1,33 @@
 import React, {useState} from 'react'
 import designImage from '../../Images/Signup.png';
-
+import axios from 'axios';
+import { useAuth } from '../../AuthContext';
+import {toast} from 'react-toastify';
+import ForgotPassword from './ForgotPassword';
+import { Link } from 'react-router-dom';
 
 function SignIn({onClose , openModal}) {
-    
-  
+  const { login } = useAuth();
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const facebookLogo = 'https://s3-alpha-sig.figma.com/img/2260/c71f/967377e16ffbb611ef03393e79e51f6e?Expires=1719187200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=TZdaqYj40GA4jv3EhToholknIWUtv8HxXMqxYOdS4OISvY6uLq2t8BhpMJt2PANl1js4wDfkB4VaKbFENKQu2FSWkANDGZEgkRpyuBOk-LuL2zvVdlAIsGrlBCZxk8JPfaEQ8a9mIC3zJscbXG66e5VPvyQ3LLbiu9zcOVaoMbBVy9I01dhhTkHCenDioEqOpglg-TykJHXFPBOkHX98SR4ClboNzRVUlu8eotyP9RQZ7h4y4cbMBSm79VdvaVRSsLCWfzrHKT7BwE1KYGxEMwTZo1iKCSLrKGXb391CC163TNSWSxuy~UMr0Tep9TnbbwwjvieMYxdlYIuWUeY4sw__';
   const [passwordVisible, setPasswordVisible] = useState(false);
-  
+
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({ ...prevState, [name]: value }));
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      await login(formData);
+      toast.success('Login successful');
+      onClose();
+    } catch (error) {
+      toast.error('Invalid email or password');
+    }
+  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -18,7 +38,6 @@ function SignIn({onClose , openModal}) {
       
 
           <>
-       
       <div className="fixed inset-0      z-50 max-lg:hidden">
         <div className=' my-auto grid place-items-center h-full '>
       
@@ -33,7 +52,7 @@ function SignIn({onClose , openModal}) {
           <div className='flex justify-between items-center w-full px-8 pt-6 '>
           <h2 className="text-2xl font-bold text-center mb-4">Sign In</h2>
           
-            <p className="text-sm text-gray-600">Don't have an account? <button onClick={openModal} className="text-blue-600 ">Create new for free!</button></p>
+            <p className="text-sm text-gray-600">Don't have an account? <button onClick={openModal} className="text-blue-600  ">Create new for free!</button></p>
             </div>
 
             <div className='flex items-center px-8 pb-8 '>
@@ -44,10 +63,12 @@ function SignIn({onClose , openModal}) {
           <div className=" flex">
             
           </div>
-          <input type="email" placeholder="Email" className="w-full px-4 py-2 border bg-[#F7F8FA]" />
+          <form onSubmit={handleSubmit}>
+          <input type="email" name='email' value={formData.email} placeholder="Email"  onChange={handleChange} className="w-full px-4 py-2 border bg-[#F7F8FA]" />
           
-          <input type="password" placeholder="Password" className="w-full px-4 py-2 border bg-[#F7F8FA] " />
-          <button className="w-full bg-blue-500 text-white py-2 rounded-full mt-6">Sign In</button>
+          <input type="password" placeholder="Password" value={formData.password} name='password'  onChange={handleChange} className="w-full px-4 py-2 border bg-[#F7F8FA] " />
+          <button className="w-full bg-blue-500 text-white py-2 rounded-full mt-6" type="submit">Sign In</button>
+          </form>
           <div className=" grid gird-row-2 space-y-2 mt-8">
             <button className="flex items-center justify-center  border py-2 rounded ">
               <img src={facebookLogo} alt="Facebook Logo" className="w-4 h-4 mr-2" />
@@ -70,7 +91,9 @@ function SignIn({onClose , openModal}) {
 
                 Sign up with Google
             </button>
+            <Link to={'/forgot_password'}>
             <p className='text-center pt-5  font-bold'>Forgot Password?</p>
+            </Link>
             </div>
           </div>
             <div className=''>
@@ -114,10 +137,10 @@ function SignIn({onClose , openModal}) {
         </div>
 
         <div className="mt-4 ">
-          
-          <input type="email" placeholder="Email" className="w-full px-4 py-2 border bg-[#F7F8FA] " />
+          <form onSubmit={handleSubmit}>
+          <input type="email" placeholder="Email" name='email' onChange={handleChange} className="w-full px-4 py-2 border bg-[#F7F8FA] " />
           <div className="relative">
-            <input id="password" type={passwordVisible ? 'text' : 'password'} placeholder="Password" className="w-full px-4 py-2 border bg-[#F7F8FA] " />
+            <input id="password" name='password' onChange={handleChange} type={passwordVisible ? 'text' : 'password'} placeholder="Password" className="w-full px-4 py-2 border bg-[#F7F8FA] " />
             <span className="absolute right-3 top-3 text-gray-500 cursor-pointer" onClick={togglePasswordVisibility}>
             {passwordVisible ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
@@ -128,12 +151,14 @@ function SignIn({onClose , openModal}) {
             </span>
           </div>
           <div className="flex items-center justify-between mt-6">
-          <button className=" bg-blue-500 w-1/2 text-white py-3 text-[13px] px-8 rounded-full">Sign In</button>
+          <button type='submit' className=" bg-blue-500 w-1/2 text-white py-3 text-[13px] px-8 rounded-full">Sign In</button>
+        
           <div className="flex justify-center  underline ">
             <span className="">or,</span>
             <button onClick={openModal} className="ml-1  font-medium">Create Account</button>
           </div>
           </div>
+          </form>
           <button className="flex items-center justify-center w-full border py-2 rounded mt-4">
             <img src={facebookLogo} alt="Facebook Logo" className="w-6 h-6 mr-2" />
             Sign up with Facebook

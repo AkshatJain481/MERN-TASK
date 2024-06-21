@@ -1,9 +1,13 @@
 import React, {useState} from 'react'
 import SearchInput from './sub_components/SearchInput'
 import SignUp from './sub_components/SignUp';
-function Navbar() {
+import { useAuth } from '../AuthContext';
+import { FaUser } from 'react-icons/fa';
 
+function Navbar() {
+    const { user, logout } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className=' px-[5%] '>
       <div >
@@ -42,7 +46,12 @@ function Navbar() {
                 <SearchInput /> 
             </div>
             
-            <div className='font-semibold flex space-x-1 items-center max-sm:text-[12px]' onClick={() => setIsModalOpen(true)}>
+            {user ? (<div className=''>
+              <FaUser  className='mx-auto'/>
+          <button onClick={logout}>Logout</button>
+          </div>
+      ) : (
+      <div className='font-semibold flex space-x-1 items-center max-sm:text-[12px] cursor-pointer' onClick={() => setIsModalOpen(true)}>
               Create account. <span className='text-blue-700 font-bold'>It's free!</span>
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_1_839)">
@@ -54,7 +63,7 @@ function Navbar() {
             </clipPath>
             </defs>
             </svg>
-            </div>
+            </div>)}
         </div>
 
         </div>

@@ -1,11 +1,44 @@
 import React,{useState} from 'react'
 import designImage from '../../Images/Signup.png';
 import SignIn from './SignIn';
+import { toast } from 'react-toastify';
+
+import axios from 'axios';
+
+
 function SignUp({onClose}) {
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({ username: '', email: '', password: '' });
+  const [ConfirmPassword, setConfirmPassword] = useState('');
+  const handleChange = e => {
+    const { name, value } = e.target;
+
+    setFormData(prevState => ({ ...prevState, [name]: value }));
+  };
+
+    function handleConfirmPassword(e) {
+      setConfirmPassword(e.target.value);
+    }
+
   function openModal() {
     setIsModalOpen(!isModalOpen);
   }
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      if (formData.password === ConfirmPassword) {
+      await axios.post('http://localhost:5000/register', formData);
+      toast.success('Registration successful');
+      setIsModalOpen(true);
+      } else {
+        toast.error('Passwords do not match');
+      }
+    } catch (error) {
+      toast.error("email or username already in use!");
+    }
+  };
   
   const facebookLogo = 'https://s3-alpha-sig.figma.com/img/2260/c71f/967377e16ffbb611ef03393e79e51f6e?Expires=1719187200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=TZdaqYj40GA4jv3EhToholknIWUtv8HxXMqxYOdS4OISvY6uLq2t8BhpMJt2PANl1js4wDfkB4VaKbFENKQu2FSWkANDGZEgkRpyuBOk-LuL2zvVdlAIsGrlBCZxk8JPfaEQ8a9mIC3zJscbXG66e5VPvyQ3LLbiu9zcOVaoMbBVy9I01dhhTkHCenDioEqOpglg-TykJHXFPBOkHX98SR4ClboNzRVUlu8eotyP9RQZ7h4y4cbMBSm79VdvaVRSsLCWfzrHKT7BwE1KYGxEMwTZo1iKCSLrKGXb391CC163TNSWSxuy~UMr0Tep9TnbbwwjvieMYxdlYIuWUeY4sw__';
     
@@ -39,20 +72,18 @@ function SignUp({onClose}) {
             
             <div className='max-w-[320px]'>
           
-          
+          <form onSubmit={handleSubmit}>
           <div className=" flex">
-            <div className="w-1/2 ">
-              <input type="text" placeholder="First Name" className="w-full px-4 py-2 border bg-[#F7F8FA]  " />
-            </div>
-            <div className="w-1/2 ">
-              <input type="text" placeholder="Last Name" className="w-full px-4 py-2 border bg-[#F7F8FA] " />
-            </div>
+              
+          <input type="text" name='username' placeholder="Username" onChange={handleChange} className="w-full px-4 py-2 border bg-[#F7F8FA]  " />
+        
           </div>
-          <input type="email" placeholder="Email" className="w-full px-4 py-2 border bg-[#F7F8FA]" />
+          <input type="email" placeholder="Email" name='email' onChange={handleChange} className="w-full px-4 py-2 border bg-[#F7F8FA]" />
           
-          <input type="password" placeholder="Password" className="w-full px-4 py-2 border bg-[#F7F8FA] " />
-          <input type="password" placeholder="Confirm Password" className="w-full px-4 py-2 border bg-[#F7F8FA] " />
-          <button className="w-full bg-blue-500 text-white py-2 rounded-full mt-6">Create Account</button>
+          <input type="password" placeholder="Password" name='password' onChange={handleChange} className="w-full px-4 py-2 border bg-[#F7F8FA] " />
+          <input type="password" placeholder="Confirm Password" onChange={handleConfirmPassword}  className="w-full px-4 py-2 border bg-[#F7F8FA] " />
+          <button className="w-full bg-blue-500 text-white py-2 rounded-full mt-6" type='submit'>Create Account</button>
+          </form>
           <div className=" grid gird-row-2 space-y-2 mt-8">
             <button className="flex items-center justify-center  border py-2 rounded ">
               <img src={facebookLogo} alt="Facebook Logo" className="w-4 h-4 mr-2" />
@@ -112,13 +143,11 @@ function SignUp({onClose}) {
         </button>
         </div>
         <div className="mt-4 ">
-          <div className="flex ">
-            <input type="text" placeholder="First Name" className="w-1/2 px-4 py-2 border bg-[#F7F8FA] " />
-            <input type="text" placeholder="Last Name" className="w-1/2 px-4 py-2 border bg-[#F7F8FA] " />
-          </div>
-          <input type="email" placeholder="Email" className="w-full px-4 py-2 border bg-[#F7F8FA] " />
+          <form onSubmit={handleSubmit}>
+          <input type="text" placeholder="Username" onChange={handleChange} name='username' className=" w-full px-4 py-2 border bg-[#F7F8FA] " />
+          <input type="email" placeholder="Email" name='email' onChange={handleChange} className="w-full px-4 py-2 border bg-[#F7F8FA] " />
           <div className="relative">
-            <input id="password" type={passwordVisible ? 'text' : 'password'} placeholder="Password" className="w-full px-4 py-2 border bg-[#F7F8FA] " />
+            <input id="password" name='password' onChange={handleChange} type={passwordVisible ? 'text' : 'password'} placeholder="Password" className="w-full px-4 py-2 border bg-[#F7F8FA] " />
             <span className="absolute right-3 top-3 text-gray-500 cursor-pointer" onClick={togglePasswordVisibility}>
             {passwordVisible ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
@@ -128,14 +157,16 @@ function SignUp({onClose}) {
               </svg>)}
             </span>
           </div>
-          <input type="password" placeholder="Confirm Password" className="w-full px-4 py-2 border  bg-[#F7F8FA] " />
+          <input type="password" placeholder="Confirm Password" onChange={handleConfirmPassword} className="w-full px-4 py-2 border  bg-[#F7F8FA] " />
           <div className="flex items-center justify-between mt-6">
-          <button className=" bg-blue-500 w-1/2 text-white py-3 text-[13px] px-8 rounded-full">Create Account</button>
+          <button className=" bg-blue-500 w-1/2 text-white py-3 text-[13px] px-8 rounded-full" type='submit'>Create Account</button>
+          
           <div className="flex justify-center  underline ">
             <span className="">or,</span>
-            <button onClick={openModal} className="ml-1  font-medium">Sign In</button>
+            <button onClick={openModal} className="ml-1  font-medium" type="button">Sign In</button>
           </div>
           </div>
+          </form>
           <button className="flex items-center justify-center w-full border py-2 rounded mt-4">
             <img src={facebookLogo} alt="Facebook Logo" className="w-6 h-6 mr-2" />
             Sign up with Facebook

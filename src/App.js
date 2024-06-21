@@ -1,25 +1,19 @@
 import React from "react";
-import Navbar from "./components/Navbar";
-import HeroSection from "./components/HeroSection";
-import PostSectionNavbar from "./components/PostSectionNavbar";
-import Content from "./components/Content";
-import MobileNavbar from "./components/MobileNavbar";
-import MobileCreatePostButton from "./components/MobileCreatePostButton";
-import SignUp from "./components/sub_components/SignUp";
+
+import 'react-toastify/dist/ReactToastify.css';
+import Home from "./Home";
+import { BrowserRouter as Router, Routes , Route } from "react-router-dom";
+import ForgotPassword from "./components/sub_components/ForgotPassword";
+
 function App() {
   return (
-    <div className="pb-16">
-     <Navbar />
-     <MobileCreatePostButton />
-     <MobileNavbar />
-     <HeroSection />
-     
-     <PostSectionNavbar />
-     
-     <Content />
-     
-     
-    </div>
+
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/forgot_password" element={<ForgotPassword/>} />
+      </Routes>
+    </Router>
   );
 }
 
