@@ -179,7 +179,9 @@ function SignIn({onClose , openModal}) {
                 </svg>
             Sign up with Google
           </button>
+          <Link to={'/forgot_password'}>
           <p className='text-center font-semibold mt-6'>Forgot Password?</p>
+          </Link>
         </div>
       </div>
     </div>

@@ -25,7 +25,7 @@ function ForgotPassword() {
     const response = await axios.post(`${process.env.REACT_APP_API_URL}/forgot-password`, { email })
       
         setLoading(false);
-
+        console.log(response.data)
         if (response.data) {
           toast.success('OTP sent to your email address');
           modalHandler();
